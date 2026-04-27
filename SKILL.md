@@ -100,3 +100,19 @@ python "C:\Users\Administrator\.codex\skills\.system\skill-creator\scripts\quick
 本 skill 通过 GitHub 在不同机器间同步。Git 命令必须串行执行；如果当前工作区要求中文提交信息，就使用中文提交信息。
 
 全局 `AGENTS.md` 不是 skill 仓库的一部分。需要在新机器上启用“每个线程默认记录”时，读取 `references/global-agents-rules.md`，把其中规则加入那台机器的全局 `AGENTS.md`。
+
+## 新环境安装
+
+在 Windows PowerShell 中执行：
+
+```powershell
+powershell -ExecutionPolicy Bypass -Command "irm https://raw.githubusercontent.com/Randolph87cb/rethink/main/install.ps1 | iex"
+```
+
+安装脚本会把仓库 clone 到 `~\.codex\skills\record-and-reflect-review`；如果已经安装，则执行 `git pull --ff-only`。脚本还会把 `references/global-agents-rules.md` 中的规则写入全局 `~\.codex\AGENTS.md`，让新线程默认启用本 skill。
+
+如果只想安装或更新 skill，不写入全局规则：
+
+```powershell
+powershell -ExecutionPolicy Bypass -Command "$script = irm https://raw.githubusercontent.com/Randolph87cb/rethink/main/install.ps1; & ([scriptblock]::Create($script)) -SkipGlobalAgents"
+```
