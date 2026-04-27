@@ -114,5 +114,12 @@ powershell -ExecutionPolicy Bypass -Command "irm https://raw.githubusercontent.c
 如果只想安装或更新 skill，不写入全局规则：
 
 ```powershell
-powershell -ExecutionPolicy Bypass -Command "$script = irm https://raw.githubusercontent.com/Randolph87cb/rethink/main/install.ps1; & ([scriptblock]::Create($script)) -SkipGlobalAgents"
+powershell -ExecutionPolicy Bypass -Command '$script = irm "https://raw.githubusercontent.com/Randolph87cb/rethink/main/install.ps1"; & ([scriptblock]::Create($script)) -SkipGlobalAgents'
+```
+
+如果当前终端对引号处理不稳定，使用两步命令：
+
+```powershell
+irm https://raw.githubusercontent.com/Randolph87cb/rethink/main/install.ps1 -OutFile "$env:TEMP\rethink-install.ps1"
+powershell -ExecutionPolicy Bypass -File "$env:TEMP\rethink-install.ps1" -SkipGlobalAgents
 ```
