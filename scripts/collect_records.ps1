@@ -8,11 +8,11 @@ param(
 $ErrorActionPreference = "Stop"
 
 if ([string]::IsNullOrWhiteSpace($RecordsRoot)) {
-    $RecordsRoot = Join-Path (Split-Path -Parent $PSScriptRoot) "records"
+    $RecordsRoot = Join-Path (Join-Path (Get-Location) "AI工作记录") "records"
 }
 
 if (-not (Test-Path -LiteralPath $RecordsRoot)) {
-    Write-Output "No records directory found: $RecordsRoot"
+    Write-Output "未找到记录目录：$RecordsRoot"
     exit 0
 }
 
@@ -23,7 +23,7 @@ $files = Get-ChildItem -LiteralPath $RecordsRoot -Filter "*.md" -Recurse |
 
 foreach ($file in $files) {
     Write-Output "## $($file.FullName)"
-    Write-Output "- LastWriteTime: $($file.LastWriteTime.ToString('yyyy-MM-dd HH:mm:ss'))"
+    Write-Output "- 最后修改时间：$($file.LastWriteTime.ToString('yyyy-MM-dd HH:mm:ss'))"
     if ($IncludeExcerpt) {
         Get-Content -LiteralPath $file.FullName -Encoding UTF8 | Select-Object -First $ExcerptLines
     }

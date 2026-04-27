@@ -32,7 +32,7 @@ function Convert-ToSafeFileName {
 }
 
 if ([string]::IsNullOrWhiteSpace($RecordsRoot)) {
-    $RecordsRoot = Join-Path (Split-Path -Parent $PSScriptRoot) "records"
+    $RecordsRoot = Join-Path (Join-Path (Get-Location) "AI工作记录") "records"
 }
 
 if ([string]::IsNullOrWhiteSpace($Date)) {
@@ -53,7 +53,7 @@ if (-not [string]::IsNullOrWhiteSpace($SummaryFile)) {
 }
 
 if ([string]::IsNullOrWhiteSpace($summary)) {
-    throw "Summary content is empty. Pipe Markdown summary content to this script or pass -SummaryFile."
+    throw "摘要内容为空。请通过管道传入 Markdown 摘要，或使用 -SummaryFile 指定摘要文件。"
 }
 
 $year = $recordDate.ToString("yyyy")
