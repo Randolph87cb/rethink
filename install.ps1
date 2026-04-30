@@ -1,4 +1,4 @@
-param(
+﻿param(
     [string]$RepoUrl = "https://github.com/Randolph87cb/rethink.git",
     [string]$SkillDir,
     [string]$GlobalAgentsPath,
@@ -70,6 +70,9 @@ function Install-GlobalAgentsRules {
     }
 
     $rules = $match.Groups[1].Value.Trim()
+    $beginMarker = "<!-- BEGIN: record-and-reflect-review global rules -->"
+    $endMarker = "<!-- END: record-and-reflect-review global rules -->"
+    $managedBlock = ($rules -replace '(?s)^\s*# 全局协作规则\s*', '').Trim()
     $agentsDir = Split-Path -Parent $GlobalAgentsPath
     New-Item -ItemType Directory -Path $agentsDir -Force | Out-Null
 
@@ -80,8 +83,25 @@ function Install-GlobalAgentsRules {
     }
 
     $current = Get-Content -LiteralPath $GlobalAgentsPath -Raw -Encoding UTF8
-    if ($current -like "*## 记录以及反思回顾*") {
-        Write-Output "全局 AGENTS.md 已包含记录以及反思回顾规则，无需重复写入。"
+    $managedPattern = "(?s)$([regex]::Escape($beginMarker)).*?$([regex]::Escape($endMarker))"
+    if ([regex]::IsMatch($current, $managedPattern)) {
+        $updated = [regex]::Replace($current, $managedPattern, [System.Text.RegularExpressions.MatchEvaluator]{ param($m) $managedBlock })
+        Set-Content -LiteralPath $GlobalAgentsPath -Value $updated -Encoding UTF8
+        Write-Output "已更新全局 AGENTS.md 受管规则块：$GlobalAgentsPath"
+        return
+    }
+
+    $legacyPattern = '(?ms)^## 记录以及反思回顾\s*.*?(?=^## |\z)'
+    if ([regex]::IsMatch($current, $legacyPattern)) {
+        $updated = [regex]::Replace($current, $legacyPattern, [System.Text.RegularExpressions.MatchEvaluator]{ param($m) $managedBlock })
+        Set-Content -LiteralPath $GlobalAgentsPath -Value $updated -Encoding UTF8
+        Write-Output "已替换全局 AGENTS.md 旧版记录规则：$GlobalAgentsPath"
+        return
+    }
+
+    if ($current -like "*# 全局协作规则*") {
+        Add-Content -LiteralPath $GlobalAgentsPath -Value "`r`n$managedBlock" -Encoding UTF8
+        Write-Output "已追加全局 AGENTS.md 受管规则块：$GlobalAgentsPath"
         return
     }
 
@@ -93,3 +113,4 @@ Install-Skill
 Install-GlobalAgentsRules
 
 Write-Output "安装完成。请重启 Codex，让新 skill 和全局规则生效。"
+

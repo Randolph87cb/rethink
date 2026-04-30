@@ -99,7 +99,7 @@ python "C:\Users\Administrator\.codex\skills\.system\skill-creator\scripts\quick
 
 本 skill 通过 GitHub 在不同机器间同步。Git 命令必须串行执行；如果当前工作区要求中文提交信息，就使用中文提交信息。
 
-全局 `AGENTS.md` 不是 skill 仓库的一部分。需要在新机器上启用“每个线程默认记录”时，读取 `references/global-agents-rules.md`，把其中规则加入那台机器的全局 `AGENTS.md`。
+全局 `AGENTS.md` 不是 skill 仓库的一部分。需要在新机器上启用“每个线程默认记录”时，读取 `references/global-agents-rules.md`，把其中规则加入那台机器的全局 `AGENTS.md`。安装脚本会维护一个带标记的受管规则块；如果发现旧版“记录以及反思回顾”规则，会替换为最新模板。
 
 ## 新环境安装
 
@@ -109,7 +109,7 @@ python "C:\Users\Administrator\.codex\skills\.system\skill-creator\scripts\quick
 powershell -ExecutionPolicy Bypass -Command "irm https://raw.githubusercontent.com/Randolph87cb/rethink/main/install.ps1 | iex"
 ```
 
-安装脚本会把仓库 clone 到 `~\.codex\skills\record-and-reflect-review`；如果已经安装，则执行 `git pull --ff-only`。脚本还会把 `references/global-agents-rules.md` 中的规则写入全局 `~\.codex\AGENTS.md`，让新线程默认启用本 skill。
+安装脚本会把仓库 clone 到 `~\.codex\skills\record-and-reflect-review`；如果已经安装，则执行 `git pull --ff-only`。脚本还会把 `references/global-agents-rules.md` 中的规则写入或更新到全局 `~\.codex\AGENTS.md`，让新线程默认启用本 skill，并同步 Windows 命令习惯和 Git 串行规则。
 
 如果只想安装或更新 skill，不写入全局规则：
 

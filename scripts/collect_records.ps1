@@ -1,4 +1,4 @@
-param(
+﻿param(
     [string]$RecordsRoot,
     [int]$Days = 30,
     [switch]$IncludeExcerpt,
@@ -29,3 +29,4 @@ foreach ($file in $files) {
     }
     Write-Output ""
 }
+

@@ -5,6 +5,7 @@
 ```markdown
 # 全局协作规则
 
+<!-- BEGIN: record-and-reflect-review global rules -->
 ## 记录以及反思回顾
 
 - 每次新开线程时，默认使用全局 skill `$record-and-reflect-review`。
@@ -15,4 +16,26 @@
 - 如果当前工作反复出现、值得沉淀，更新当前项目目录下的 `AI工作记录/skill-backlog.md`，并在合适时建议新增或优化 skill。
 - 当记录过多时，先识别低价值记录，例如临时测试、重复内容、无执行结果或已被阶段总结覆盖的记录；删除前说明依据并取得用户确认。
 - 任何项目自己的 `AGENTS.md` 规则优先于本全局规则；如果冲突，先遵守项目规则并向用户说明。
+
+## 命令、编码与验证
+
+- 在 Windows / PowerShell 环境下，不要默认尝试 `rg`；只有在已通过 `Get-Command rg` 确认可用时才使用。
+- 如果 `rg` 不可用，不要反复重试，也不要把失败视为阻塞；直接使用 PowerShell 原生命令替代。
+- 列文件优先使用 `Get-ChildItem -Recurse`，按文件名筛选使用 `Get-ChildItem -Recurse -Filter`，搜索文本使用 `Select-String`。
+- 在 PowerShell 环境下使用 PowerShell 兼容命令，避免直接套用 bash 风格连接符或只适用于 Unix shell 的写法。
+- 读写中文内容、Markdown、PowerShell 脚本和配置文件时，优先使用 UTF-8；需要兼容 Windows PowerShell 5.x 的含中文 `.ps1` 文件应保存为 UTF-8 with BOM，或优先使用 PowerShell 7 / 当前会话直接执行。
+- 项目存在统一验证脚本时，优先运行统一验证入口；没有统一入口时复用现有测试框架。无法验证时，必须说明原因、风险和已完成的替代检查。
+
+## Skill 沉淀
+
+- 如果同类任务反复出现、造成明显返工，或已经形成稳定流程，优先记录到当前项目的 `AI工作记录/skill-backlog.md`，再判断是否新增或优化 skill。
+- 项目特有流程优先沉淀在项目目录或项目 skill 中；只有跨项目稳定复用的规则，才建议进入全局 `AGENTS.md` 或全局 skill。
+- 新增或修改 skill 时，遵循 `$skill-creator` 的结构和校验要求；修改完成后运行 `quick_validate.py`，并把验证结果写入工作记录。
+
+## Git 操作
+
+- Git 命令必须串行执行；不要把多个 `git` 命令放入并行工具、后台任务或同一轮并发执行。
+- 会改变仓库状态的 Git 命令前，先查看当前状态，避免覆盖用户或其他工具已经产生的改动。
+- 如果当前项目使用 Git 维护，那么每次完成修改后都要更新 Git 状态，使用中文提交信息创建提交，并推送到远端。
+<!-- END: record-and-reflect-review global rules -->
 ```
