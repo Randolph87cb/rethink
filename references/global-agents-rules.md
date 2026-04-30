@@ -19,9 +19,8 @@
 
 ## 命令、编码与验证
 
-- 在 Windows / PowerShell 环境下，不要默认尝试 `rg`；只有在已通过 `Get-Command rg` 确认可用时才使用。
-- 如果 `rg` 不可用，不要反复重试，也不要把失败视为阻塞；直接使用 PowerShell 原生命令替代。
-- 列文件优先使用 `Get-ChildItem -Recurse`，按文件名筛选使用 `Get-ChildItem -Recurse -Filter`，搜索文本使用 `Select-String`。
+- 在 Windows / PowerShell 环境下，直接视 `rg` 为不可用，不要检测、不要尝试、不要重试。
+- Windows 下统一使用 PowerShell 原生命令替代 `rg`；列文件优先使用 `Get-ChildItem -Recurse`，按文件名筛选使用 `Get-ChildItem -Recurse -Filter`，搜索文本使用 `Select-String`。
 - 在 PowerShell 环境下使用 PowerShell 兼容命令，避免直接套用 bash 风格连接符或只适用于 Unix shell 的写法。
 - 读写中文内容、Markdown、PowerShell 脚本和配置文件时，优先使用 UTF-8；需要兼容 Windows PowerShell 5.x 的含中文 `.ps1` 文件应保存为 UTF-8 with BOM，或优先使用 PowerShell 7 / 当前会话直接执行。
 - 项目存在统一验证脚本时，优先运行统一验证入口；没有统一入口时复用现有测试框架。无法验证时，必须说明原因、风险和已完成的替代检查。
