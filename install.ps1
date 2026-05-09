@@ -1,6 +1,6 @@
 ﻿param(
     [string]$RepoUrl = "https://github.com/Randolph87cb/rethink.git",
-    [string[]]$SkillNames = @("record-and-reflect-review"),
+    [string[]]$SkillNames = @("record-and-reflect-review", "task-retrospective"),
     [string]$SkillDir,
     [string]$GlobalAgentsPath,
     [string]$SourceRepoDir,
@@ -144,7 +144,7 @@ function Remove-ManagedTargetItems {
 
     New-Item -ItemType Directory -Path $TargetDir -Force | Out-Null
 
-    foreach ($itemName in @("SKILL.md", "agents", "scripts", "references", "assets")) {
+    foreach ($itemName in @(".git", "SKILL.md", "agents", "scripts", "references", "assets", "install.ps1", "skill-backlog.md", "AI工作记录")) {
         $targetPath = Join-Path $TargetDir $itemName
         if (Test-Path -LiteralPath $targetPath) {
             Remove-Item -LiteralPath $targetPath -Recurse -Force

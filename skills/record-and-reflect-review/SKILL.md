@@ -108,15 +108,15 @@ python "C:\Users\Administrator\.codex\skills\.system\skill-creator\scripts\quick
 在 Windows PowerShell 中执行：
 
 ```powershell
-powershell -ExecutionPolicy Bypass -Command '& ([scriptblock]::Create((irm "https://raw.githubusercontent.com/Randolph87cb/rethink/main/install.ps1"))) -SkillNames record-and-reflect-review'
+powershell -ExecutionPolicy Bypass -Command '& ([scriptblock]::Create((irm "https://raw.githubusercontent.com/Randolph87cb/rethink/main/install.ps1")))'
 ```
 
-安装脚本会先更新源码缓存，再把本 skill 导出到 `~\.codex\skills\record-and-reflect-review`。再次运行同一条命令即可更新到最新版本。脚本还会把 `references/global-agents-rules.md` 中的规则写入或更新到全局 `~\.codex\AGENTS.md`，让新线程默认启用本 skill，并同步 Windows 命令习惯和 Git 串行规则。
+默认会同时安装 `record-and-reflect-review` 和 `task-retrospective`。安装脚本会先更新源码缓存，再把本 skill 导出到 `~\.codex\skills\record-and-reflect-review`。再次运行同一条命令即可更新到最新版本。脚本还会把 `references/global-agents-rules.md` 中的规则写入或更新到全局 `~\.codex\AGENTS.md`，让新线程默认启用本 skill，并同步 Windows 命令习惯和 Git 串行规则。
 
-如果还想一并安装任务复盘 skill，可执行：
+如果只想单独安装记录 skill，可执行：
 
 ```powershell
-powershell -ExecutionPolicy Bypass -Command '& ([scriptblock]::Create((irm "https://raw.githubusercontent.com/Randolph87cb/rethink/main/install.ps1"))) -SkillNames record-and-reflect-review,task-retrospective'
+powershell -ExecutionPolicy Bypass -Command '& ([scriptblock]::Create((irm "https://raw.githubusercontent.com/Randolph87cb/rethink/main/install.ps1"))) -SkillNames record-and-reflect-review'
 ```
 
 如果只想安装或更新 skill，不写入全局规则：
