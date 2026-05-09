@@ -108,10 +108,10 @@ python "C:\Users\Administrator\.codex\skills\.system\skill-creator\scripts\quick
 在 Windows PowerShell 中执行：
 
 ```powershell
-powershell -ExecutionPolicy Bypass -Command "irm https://raw.githubusercontent.com/Randolph87cb/rethink/main/install.ps1 | iex"
+powershell -ExecutionPolicy Bypass -Command '& ([scriptblock]::Create((irm "https://raw.githubusercontent.com/Randolph87cb/rethink/main/install.ps1"))) -SkillNames record-and-reflect-review'
 ```
 
-安装脚本会把仓库 clone 到 `~\.codex\skills\record-and-reflect-review`；如果已经安装，则执行 `git pull --ff-only`。脚本还会把 `references/global-agents-rules.md` 中的规则写入或更新到全局 `~\.codex\AGENTS.md`，让新线程默认启用本 skill，并同步 Windows 命令习惯和 Git 串行规则。
+安装脚本会先更新源码缓存，再把本 skill 导出到 `~\.codex\skills\record-and-reflect-review`。再次运行同一条命令即可更新到最新版本。脚本还会把 `references/global-agents-rules.md` 中的规则写入或更新到全局 `~\.codex\AGENTS.md`，让新线程默认启用本 skill，并同步 Windows 命令习惯和 Git 串行规则。
 
 如果还想一并安装任务复盘 skill，可执行：
 
@@ -122,12 +122,12 @@ powershell -ExecutionPolicy Bypass -Command '& ([scriptblock]::Create((irm "http
 如果只想安装或更新 skill，不写入全局规则：
 
 ```powershell
-powershell -ExecutionPolicy Bypass -Command '$script = irm "https://raw.githubusercontent.com/Randolph87cb/rethink/main/install.ps1"; & ([scriptblock]::Create($script)) -SkipGlobalAgents'
+powershell -ExecutionPolicy Bypass -Command '$script = irm "https://raw.githubusercontent.com/Randolph87cb/rethink/main/install.ps1"; & ([scriptblock]::Create($script)) -SkillNames record-and-reflect-review -SkipGlobalAgents'
 ```
 
 如果当前终端对引号处理不稳定，使用两步命令：
 
 ```powershell
 irm https://raw.githubusercontent.com/Randolph87cb/rethink/main/install.ps1 -OutFile "$env:TEMP\rethink-install.ps1"
-powershell -ExecutionPolicy Bypass -File "$env:TEMP\rethink-install.ps1" -SkipGlobalAgents
+powershell -ExecutionPolicy Bypass -File "$env:TEMP\rethink-install.ps1" -SkillNames record-and-reflect-review -SkipGlobalAgents
 ```

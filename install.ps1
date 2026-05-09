@@ -20,8 +20,8 @@ if ([string]::IsNullOrWhiteSpace($SourceRepoDir)) {
 $SkillDefinitions = @{
     "record-and-reflect-review" = @{
         DefaultSkillDir = Join-Path $env:USERPROFILE ".codex\skills\record-and-reflect-review"
-        SourceSubpath = "."
-        InstallMode = "repo"
+        SourceSubpath = "skills\record-and-reflect-review"
+        InstallMode = "export"
         SupportsGlobalAgents = $true
     }
     "task-retrospective" = @{
@@ -31,6 +31,8 @@ $SkillDefinitions = @{
         SupportsGlobalAgents = $false
     }
 }
+
+$script:SourceRepoEnsured = $false
 
 function Invoke-Git {
     param(
@@ -110,6 +112,10 @@ function Get-TargetSkillDir {
 }
 
 function Ensure-SourceRepo {
+    if ($script:SourceRepoEnsured) {
+        return
+    }
+
     $parentDir = Split-Path -Parent $SourceRepoDir
     New-Item -ItemType Directory -Path $parentDir -Force | Out-Null
 
@@ -121,11 +127,13 @@ function Ensure-SourceRepo {
 
         Write-Output "已检测到源码缓存，开始更新：$SourceRepoDir"
         Invoke-Git -WorkingDirectory $SourceRepoDir -Arguments @("pull", "--ff-only")
+        $script:SourceRepoEnsured = $true
         return
     }
 
     Write-Output "开始拉取源码缓存：$SourceRepoDir"
     Invoke-Git -Arguments @("clone", $RepoUrl, $SourceRepoDir)
+    $script:SourceRepoEnsured = $true
 }
 
 function Remove-ManagedTargetItems {
@@ -142,30 +150,6 @@ function Remove-ManagedTargetItems {
             Remove-Item -LiteralPath $targetPath -Recurse -Force
         }
     }
-}
-
-function Install-RepoSkill {
-    param(
-        [Parameter(Mandatory = $true)]
-        [string]$TargetDir
-    )
-
-    $skillsRoot = Split-Path -Parent $TargetDir
-    New-Item -ItemType Directory -Path $skillsRoot -Force | Out-Null
-
-    if (Test-Path -LiteralPath $TargetDir) {
-        $gitDir = Join-Path $TargetDir ".git"
-        if (-not (Test-Path -LiteralPath $gitDir)) {
-            throw "目标目录已存在但不是 Git 仓库：$TargetDir。请先手动处理该目录，避免覆盖已有文件。"
-        }
-
-        Write-Output "已检测到 skill，开始更新：$TargetDir"
-        Invoke-Git -WorkingDirectory $TargetDir -Arguments @("pull", "--ff-only")
-        return
-    }
-
-    Write-Output "开始安装 skill：$TargetDir"
-    Invoke-Git -Arguments @("clone", $RepoUrl, $TargetDir)
 }
 
 function Install-ExportedSkill {
@@ -265,9 +249,7 @@ foreach ($skillName in $resolvedSkillNames) {
     $definition = Get-SkillDefinition -SkillName $skillName
     $targetDir = Get-TargetSkillDir -SkillName $skillName
 
-    if ($definition.InstallMode -eq "repo") {
-        Install-RepoSkill -TargetDir $targetDir
-    } elseif ($definition.InstallMode -eq "export") {
+    if ($definition.InstallMode -eq "export") {
         Install-ExportedSkill -SkillName $skillName -TargetDir $targetDir
     } else {
         throw "未知的安装模式：$($definition.InstallMode)"

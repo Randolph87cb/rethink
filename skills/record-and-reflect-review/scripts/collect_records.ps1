@@ -29,4 +29,3 @@ foreach ($file in $files) {
     }
     Write-Output ""
 }
-
