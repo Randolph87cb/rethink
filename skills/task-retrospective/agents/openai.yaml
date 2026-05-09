@@ -1,0 +1,7 @@
+interface:
+  display_name: "任务复盘反思"
+  short_description: "基于任务记录复盘协作问题、返工原因与后续可沉淀机会"
+  default_prompt: "使用 $task-retrospective 基于当前线程记录做一次复盘，指出信息缺口、返工原因和可沉淀项。"
+
+policy:
+  allow_implicit_invocation: true

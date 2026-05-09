@@ -1,20 +1,21 @@
 ---
 name: record-and-reflect-review
-description: 记录 AI 对话工作摘要，并在用户明确要求时回顾重复出现的工作模式，提出新增或维护 Codex skill 的建议。适用于用户要求记录线程、总结近期 AI 工作、回顾历史工作、识别反复出现的任务模式、整理 skill 候选、根据历史工作新增 skill，或优化已有 skill 的场景。
+description: 记录 AI 对话工作摘要，并在用户明确要求回顾历史记录、识别重复模式或整理 skill 候选时，提出新增或维护 Codex skill 的建议。适用于用户要求记录线程、总结近期 AI 工作、回顾历史工作、识别反复出现的任务模式、整理 skill 候选、根据历史工作新增 skill，或优化已有 skill 的场景。单次任务复盘优先交给已安装的 `$task-retrospective`。
 ---
 
 # 记录以及反思回顾
 
 ## 目标
 
-维护一套按项目分开的 AI 工作记录。每个线程默认保存为简洁的 Markdown 摘要；只有在用户明确要求复盘、回顾或整理模式时，才进一步做反思和 skill 候选判断。
+维护一套按项目分开的 AI 工作记录。每个线程默认保存为简洁的 Markdown 摘要；只有在用户明确要求回顾历史记录、整理重复模式或判断 skill 候选时，才进一步做模式级分析。
 
 ## 默认规则
 
 - 默认只记录摘要，不保存完整对话原文，除非用户明确要求。
 - 不记录密钥、令牌、账号密码、公司敏感原文、客户敏感数据和不必要的个人隐私。
 - 记录要服务于未来复用，重点保留目标、关键决策、修改文件、使用命令、验证结果、可复用流程和后续事项。
-- 默认先完成记录，不默认展开完整复盘；复盘属于任务完成后的按需动作。
+- 默认先完成记录，不默认展开单次任务复盘。
+- 当用户明确要求复盘单次任务、反思协作方式、总结返工原因或判断本次任务如何改进时，优先使用已安装的 `$task-retrospective`。
 - 记录只保存在当前工作目录下，避免不同项目的记录混在一起。
 - 遵守当前工作区的 `AGENTS.md` 和用户规则；修改文件、删除记录、更新 skill 或执行 Git 操作前，按当前规则确认。
 - 更新本 skill 或其他 skill 时，使用 `skill-creator` 指南并运行校验。
@@ -48,19 +49,6 @@ $summary = @'
 '@
 $summary | powershell -ExecutionPolicy Bypass -File "C:\Users\Administrator\.codex\skills\record-and-reflect-review\scripts\new_record.ps1" -Title "线程简短主题"
 ```
-
-## 任务完成后的复盘
-
-当用户明确要求复盘这次协作、总结哪里应该改进，或判断是否值得沉淀为模板、脚本或 skill 时：
-
-1. 先基于本线程记录整理事实，不要脱离记录空泛总结。
-2. 优先回答以下四个问题：
-   - 这次真正的目标是什么。
-   - 哪些信息一开始就该给。
-   - 哪些返工是因为需求不清、约束遗漏或验收标准不完整。
-   - 这件事下次是否值得模板化、脚本化或 skill 化。
-3. 如果模式还不稳定，先把结论写进记录或 `skill-backlog.md`，不要急着新建 skill。
-4. 如果同类问题已重复出现，再进入“回顾历史”流程，判断是否优化已有 skill 或拆出新 skill。
 
 ## 回顾历史
 
@@ -124,6 +112,12 @@ powershell -ExecutionPolicy Bypass -Command "irm https://raw.githubusercontent.c
 ```
 
 安装脚本会把仓库 clone 到 `~\.codex\skills\record-and-reflect-review`；如果已经安装，则执行 `git pull --ff-only`。脚本还会把 `references/global-agents-rules.md` 中的规则写入或更新到全局 `~\.codex\AGENTS.md`，让新线程默认启用本 skill，并同步 Windows 命令习惯和 Git 串行规则。
+
+如果还想一并安装任务复盘 skill，可执行：
+
+```powershell
+powershell -ExecutionPolicy Bypass -Command '& ([scriptblock]::Create((irm "https://raw.githubusercontent.com/Randolph87cb/rethink/main/install.ps1"))) -SkillNames record-and-reflect-review,task-retrospective'
+```
 
 如果只想安装或更新 skill，不写入全局规则：
 

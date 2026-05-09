@@ -1,7 +1,7 @@
 interface:
   display_name: "记录以及反思回顾"
-  short_description: "按项目记录 AI 工作摘要，并沉淀可复用 skill"
-  default_prompt: "使用 $record-and-reflect-review 记录当前线程，并回顾这项工作是否应该沉淀为新 skill 或优化已有 skill。"
+  short_description: "按项目记录 AI 工作摘要并整理重复模式与 skill 候选"
+  default_prompt: "使用 $record-and-reflect-review 记录当前线程，并判断哪些重复模式应该整理到 skill-backlog.md。"
 
 policy:
   allow_implicit_invocation: true
