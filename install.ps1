@@ -1,6 +1,6 @@
 ﻿param(
     [string]$RepoUrl = "https://github.com/Randolph87cb/rethink.git",
-    [string[]]$SkillNames = @("record-and-reflect-review", "task-retrospective"),
+    [string[]]$SkillNames = @("record-and-reflect-review", "task-retrospective", "delegation-orchestrator"),
     [string]$SkillDir,
     [string]$GlobalAgentsPath,
     [string]$SourceRepoDir,
@@ -18,6 +18,12 @@ if ([string]::IsNullOrWhiteSpace($SourceRepoDir)) {
 }
 
 $SkillDefinitions = @{
+    "delegation-orchestrator" = @{
+        DefaultSkillDir = Join-Path $env:USERPROFILE ".codex\skills\delegation-orchestrator"
+        SourceSubpath = "skills\delegation-orchestrator"
+        InstallMode = "export"
+        SupportsGlobalAgents = $false
+    }
     "record-and-reflect-review" = @{
         DefaultSkillDir = Join-Path $env:USERPROFILE ".codex\skills\record-and-reflect-review"
         SourceSubpath = "skills\record-and-reflect-review"

@@ -1,0 +1,7 @@
+interface:
+  display_name: "委派编排器"
+  short_description: "按难度分派 subagent 并控制主线程职责边界"
+  default_prompt: "使用 $delegation-orchestrator 以默认委派模式处理当前任务，主线程负责拆解和决策，具体实现优先交给 subagent。"
+
+policy:
+  allow_implicit_invocation: true

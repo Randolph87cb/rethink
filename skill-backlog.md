@@ -16,3 +16,4 @@
 | 2026-05-09 | 单次任务复盘需要独立触发，不应继续挤在 record skill 中 | 已新增 `skills/task-retrospective/`，并扩展安装脚本支持其全局安装与更新；全局规则新增“任务完成后的复盘”小节，record skill 同步让出复盘职责 | task-retrospective |
 | 2026-05-09 | 两个 skill 的目录层级和安装方式不一致 | 已将 `record-and-reflect-review` 迁移到 `skills/record-and-reflect-review/`；安装脚本改为对两个 skill 都使用“源码缓存 + 导出安装/更新”的统一模式 | record-and-reflect-review, task-retrospective |
 | 2026-05-09 | 默认运行 install 脚本后未安装全局反思 skill | 已将 `install.ps1` 的默认 `SkillNames` 改为同时安装 `record-and-reflect-review` 与 `task-retrospective`，并补充旧版安装目录清理逻辑；已在用户本机执行默认安装并验证成功 | record-and-reflect-review, task-retrospective |
+| 2026-05-09 | 主线程只讨论方向和规则，具体实现优先交给 subagent | 已新增全局 skill `delegation-orchestrator`，默认安装时一并导出；全局规则模板新增“委派协作模式”小节，使交付型任务默认按委派模式组织 | delegation-orchestrator, record-and-reflect-review |
