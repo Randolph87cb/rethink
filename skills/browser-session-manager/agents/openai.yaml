@@ -1,0 +1,7 @@
+interface:
+  display_name: "浏览器登录态管理"
+  short_description: "统一管理 Playwright 浏览器脚本复用的 storageState 与补充 profile 会话"
+  default_prompt: "使用 $browser-session-manager 为浏览器自动化脚本建立统一的登录态目录、会话注册表和复用流程。"
+
+policy:
+  allow_implicit_invocation: true

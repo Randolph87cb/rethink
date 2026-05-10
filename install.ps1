@@ -1,6 +1,6 @@
 ﻿param(
     [string]$RepoUrl = "https://github.com/Randolph87cb/rethink.git",
-    [string[]]$SkillNames = @("record-and-reflect-review", "task-retrospective", "delegation-orchestrator"),
+    [string[]]$SkillNames = @("record-and-reflect-review", "task-retrospective", "delegation-orchestrator", "browser-session-manager"),
     [string]$SkillDir,
     [string]$GlobalAgentsPath,
     [string]$SourceRepoDir,
@@ -18,6 +18,12 @@ if ([string]::IsNullOrWhiteSpace($SourceRepoDir)) {
 }
 
 $SkillDefinitions = @{
+    "browser-session-manager" = @{
+        DefaultSkillDir = Join-Path $env:USERPROFILE ".codex\skills\browser-session-manager"
+        SourceSubpath = "skills\browser-session-manager"
+        InstallMode = "export"
+        SupportsGlobalAgents = $false
+    }
     "delegation-orchestrator" = @{
         DefaultSkillDir = Join-Path $env:USERPROFILE ".codex\skills\delegation-orchestrator"
         SourceSubpath = "skills\delegation-orchestrator"

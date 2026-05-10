@@ -111,7 +111,7 @@ python "C:\Users\Administrator\.codex\skills\.system\skill-creator\scripts\quick
 powershell -ExecutionPolicy Bypass -Command '& ([scriptblock]::Create((irm "https://raw.githubusercontent.com/Randolph87cb/rethink/main/install.ps1")))'
 ```
 
-默认会同时安装 `record-and-reflect-review`、`task-retrospective` 和 `delegation-orchestrator`。安装脚本会先更新源码缓存，再把本 skill 导出到 `~\.codex\skills\record-and-reflect-review`。再次运行同一条命令即可更新到最新版本。脚本还会把 `references/global-agents-rules.md` 中的规则写入或更新到全局 `~\.codex\AGENTS.md`，让新线程默认启用记录与委派协作模式，并同步 Windows 命令习惯和 Git 串行规则。
+默认会同时安装 `record-and-reflect-review`、`task-retrospective`、`delegation-orchestrator` 和 `browser-session-manager`。安装脚本会先更新源码缓存，再把本 skill 导出到 `~\.codex\skills\record-and-reflect-review`。再次运行同一条命令即可更新到最新版本。脚本还会把 `references/global-agents-rules.md` 中的规则写入或更新到全局 `~\.codex\AGENTS.md`，让新线程默认启用记录与委派协作模式，并同步 Windows 命令习惯和 Git 串行规则。
 
 如果只想单独安装记录 skill，可执行：
 
