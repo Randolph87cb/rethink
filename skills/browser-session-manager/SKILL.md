@@ -16,6 +16,7 @@ description: 统一管理浏览器自动化脚本复用的登录态，默认以 
 - 默认全局目录为 `%LOCALAPPDATA%\Codex\browser-sessions`。
 - 真实会话数据放在全局目录中；skill 目录只保存规则、脚本和参考文档。
 - 使用 `scripts/session_registry.ps1` 维护注册表，避免每个脚本各自拼路径和 JSON。
+- 使用 `scripts/refresh_login.ps1` 以“一条命令打开浏览器并刷新登录态”的方式维护常用站点。
 - 需要了解目录结构、字段含义和命名规范时，读取 `references/store-layout.md`。
 - 需要把会话接入 Playwright 脚本时，读取 `references/playwright-integration.md`。
 
@@ -60,9 +61,33 @@ powershell -ExecutionPolicy Bypass -File "$env:USERPROFILE\.codex\skills\browser
    - 成功验证后调用 `mark-verified` 更新时间。
 4. 只有在 `storageState` 持续不稳定时，才把该站点切到 `profile` 或 `hybrid`。
 
+## 快速刷新
+
+- 优先用 `scripts/refresh_login.ps1` 做人工登录刷新：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File "$env:USERPROFILE\.codex\skills\browser-session-manager\scripts\refresh_login.ps1" `
+  -Site example `
+  -Env prod `
+  -Account ops `
+  -Browser chromium `
+  -CreateIfMissing `
+  -BaseUrl https://example.com `
+  -CheckUrl https://example.com/account `
+  -CheckSelector '[data-test="user-menu"]'
+```
+
+- 这条命令会：
+  - 自动创建或读取会话；
+  - 打开 Playwright 浏览器；
+  - 尝试加载现有 `storageState`；
+  - 在你关闭浏览器后自动回写 `storageState`；
+  - 成功保存后自动执行 `mark-verified`。
+
 ## 脚本约定
 
 - 所有站点脚本都应优先调用注册表脚本，而不是硬编码会话目录。
+- 人工维护登录态时，优先复用 `refresh_login.ps1`，不要为每个站点单独重复写“打开浏览器并保存状态”的壳脚本。
 - 站点脚本负责“验证是否真的已登录”；注册表脚本只负责路径、索引和元数据，不负责站点级判断。
 - 站点脚本保存登录态后，应回写注册表中的：
   - `mode`

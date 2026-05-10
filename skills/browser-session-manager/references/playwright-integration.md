@@ -82,6 +82,18 @@ with sync_playwright() as p:
 
 ## 推荐流程
 
+如果只是想人工登录一次并更新登录态，优先直接调用：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File "$env:USERPROFILE\.codex\skills\browser-session-manager\scripts\refresh_login.ps1" `
+  -Site shop-admin `
+  -Env prod `
+  -Account ops `
+  -Browser chromium
+```
+
+这会打开浏览器；你完成登录并关闭窗口后，脚本会自动保存 `storageState`。
+
 1. 启动前先调用 `get` 读取会话元数据。
 2. 如果 `statePath` 文件存在，则直接加载。
 3. 如果加载后发现未登录，则走登录流程并在成功后重写 `storageState`：
