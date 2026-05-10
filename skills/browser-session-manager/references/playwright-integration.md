@@ -95,6 +95,18 @@ powershell -ExecutionPolicy Bypass -File "$env:USERPROFILE\.codex\skills\browser
 
 这会打开浏览器；你完成登录并关闭窗口后，脚本会自动保存 `storageState`。如果这条会话还不存在，脚本会用本次提供的 URL 自动建档。
 
+如果要统一检查登录态，优先直接调用：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File "$env:USERPROFILE\.codex\skills\browser-session-manager\scripts\verify_session.ps1" `
+  -Site shop-admin `
+  -Env prod `
+  -Account ops `
+  -Browser chromium
+```
+
+默认会访问 `checkUrl` 或 `baseUrl`，判断页面是否仍然出现登录入口；这适合把“主页是否还有登录选项”作为通用验收逻辑的站点。
+
 1. 启动前先调用 `get` 读取会话元数据。
 2. 如果 `statePath` 文件存在，则直接加载。
 3. 如果加载后发现未登录，则走登录流程并在成功后重写 `storageState`：

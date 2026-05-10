@@ -17,6 +17,7 @@ description: 统一管理浏览器自动化脚本复用的登录态，默认以 
 - 真实会话数据放在全局目录中；skill 目录只保存规则、脚本和参考文档。
 - 使用 `scripts/session_registry.ps1` 维护注册表，避免每个脚本各自拼路径和 JSON。
 - 使用 `scripts/refresh_login.ps1` 以“一条命令打开浏览器并刷新登录态”的方式维护常用站点。
+- 使用 `scripts/verify_session.ps1` 统一检查会话是否仍有效；默认逻辑是打开 `checkUrl` 或主页，判断页面上是否还出现登录入口。
 - 需要了解目录结构、字段含义和命名规范时，读取 `references/store-layout.md`。
 - 需要把会话接入 Playwright 脚本时，读取 `references/playwright-integration.md`。
 
@@ -83,6 +84,24 @@ powershell -ExecutionPolicy Bypass -File "$env:USERPROFILE\.codex\skills\browser
   - 在你关闭浏览器后自动回写 `storageState`；
   - 成功保存后自动执行 `mark-verified`。
 - 如果会话不存在，只要本次命令里提供了 `-Url` 或 `-BaseUrl`，脚本会自动创建这条会话，不需要额外区分“第一次”和“后续”。
+- 新增站点时如果没有显式传 `-CheckUrl`，脚本会自动把 `checkUrl` 补成 `baseUrl`，方便后续直接复用统一的登录态检查命令。
+
+## 会话检查
+
+- 默认检查命令：
+
+```powershell
+powershell -ExecutionPolicy Bypass -File "$env:USERPROFILE\.codex\skills\browser-session-manager\scripts\verify_session.ps1" `
+  -Site example `
+  -Env prod `
+  -Account ops `
+  -Browser chromium
+```
+
+- 默认检查逻辑：
+  - 优先访问注册表中的 `checkUrl`，没有则退回 `baseUrl`；
+  - 如果页面上出现 `登录`、`注册`、`login`、`sign in` 一类入口，判定为未登录；
+  - 如果配置了 `checkSelector` 且该元素可见，优先判定为已登录。
 
 ## 脚本约定
 

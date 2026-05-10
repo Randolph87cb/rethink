@@ -118,6 +118,8 @@ if (-not $sessionExists) {
     }
     if ($CheckUrl) {
         $resolvedCheckUrl = $CheckUrl
+    } elseif ($resolvedBaseUrl) {
+        $resolvedCheckUrl = $resolvedBaseUrl
     } else {
         $resolvedCheckUrl = $Url
     }
@@ -145,6 +147,10 @@ if (-not $sessionExists) {
     }
     if ($PSBoundParameters.ContainsKey("CheckUrl")) {
         $resolvedCheckUrl = $CheckUrl
+    } elseif (-not [string]::IsNullOrWhiteSpace($session.checkUrl)) {
+        $resolvedCheckUrl = $session.checkUrl
+    } elseif (-not [string]::IsNullOrWhiteSpace($resolvedBaseUrl)) {
+        $resolvedCheckUrl = $resolvedBaseUrl
     } else {
         $resolvedCheckUrl = $session.checkUrl
     }
