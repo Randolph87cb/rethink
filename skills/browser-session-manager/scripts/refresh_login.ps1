@@ -107,8 +107,8 @@ try {
 }
 
 if (-not $sessionExists) {
-    if (-not $CreateIfMissing) {
-        throw "Session does not exist. For first-time use, pass -CreateIfMissing and provide -BaseUrl or -Url."
+    if (-not $BaseUrl -and -not $Url -and -not $CheckUrl) {
+        throw "Session does not exist. For first-time use, provide -Url or -BaseUrl so the session can be created automatically."
     }
 
     if ($BaseUrl) {
@@ -217,6 +217,9 @@ if (-not [string]::IsNullOrWhiteSpace($session.statePath)) {
 $playwrightArgs += $targetUrl
 
 Write-Host "Opening browser. Finish login in the browser, then close the window to save session state." -ForegroundColor Cyan
+if (-not $sessionExists) {
+    Write-Host "Session was missing, so it was created automatically before launch." -ForegroundColor DarkGray
+}
 Write-Host ("Command: npx " + ($playwrightArgs -join " ")) -ForegroundColor DarkGray
 
 if ($DryRun) {

@@ -89,10 +89,11 @@ powershell -ExecutionPolicy Bypass -File "$env:USERPROFILE\.codex\skills\browser
   -Site shop-admin `
   -Env prod `
   -Account ops `
-  -Browser chromium
+  -Browser chromium `
+  -BaseUrl https://admin.example.com
 ```
 
-这会打开浏览器；你完成登录并关闭窗口后，脚本会自动保存 `storageState`。
+这会打开浏览器；你完成登录并关闭窗口后，脚本会自动保存 `storageState`。如果这条会话还不存在，脚本会用本次提供的 URL 自动建档。
 
 1. 启动前先调用 `get` 读取会话元数据。
 2. 如果 `statePath` 文件存在，则直接加载。

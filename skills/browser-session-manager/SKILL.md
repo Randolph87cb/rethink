@@ -71,7 +71,6 @@ powershell -ExecutionPolicy Bypass -File "$env:USERPROFILE\.codex\skills\browser
   -Env prod `
   -Account ops `
   -Browser chromium `
-  -CreateIfMissing `
   -BaseUrl https://example.com `
   -CheckUrl https://example.com/account `
   -CheckSelector '[data-test="user-menu"]'
@@ -83,6 +82,7 @@ powershell -ExecutionPolicy Bypass -File "$env:USERPROFILE\.codex\skills\browser
   - 尝试加载现有 `storageState`；
   - 在你关闭浏览器后自动回写 `storageState`；
   - 成功保存后自动执行 `mark-verified`。
+- 如果会话不存在，只要本次命令里提供了 `-Url` 或 `-BaseUrl`，脚本会自动创建这条会话，不需要额外区分“第一次”和“后续”。
 
 ## 脚本约定
 
